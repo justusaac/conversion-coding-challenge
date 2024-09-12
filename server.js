@@ -1,5 +1,8 @@
 const fs = require('fs');
 const path = require('path');
+const express = require('express');
+
+const server = express();
 
 //Load all the stored unit conversions into a global object
 function load_measurements(directory){
@@ -29,6 +32,7 @@ function get_attribute(unit1, unit2){
 	}
 	return null;
 }
+//Logic for the conversion
 function convert_measurement(amount, from_unit, to_unit){
 	const attribute = get_attribute(from_unit, to_unit);
 	const units = all_measurements[attribute];
@@ -37,4 +41,32 @@ function convert_measurement(amount, from_unit, to_unit){
 	}
 	return amount * (units[from_unit] / units[to_unit]);
 }
+//Endpoint for converting units
+//Expects `value`, `from`, and `to` in the query string
+server.get('/convert', (request, response) => {
+	const required_parameters =['value','from','to'];
+	const query = request.query;
+	if(!required_parameters.every(this.hasOwnProperty, query)){
+		response.status(400);
+		response.send(`Expected query string parameters ${required_parameters}`);
+		return;
+	}
+	const value = +query.value;
+	if(isNaN(value)){
+		response.status(400);
+		response.send(`Expected \`value\` to contain a number, got ${query.value}`);
+		return;
+	}
+	const result = convert_measurement(value, query.from, query.to);
+	if(result === null){
+		response.status(400);
+		response.send(`Couldn't convert ${query.from} into ${query.to}`);
+		return;
+	}
+	response.send(result.toString());
+});
+
+const port = process.env.PORT || 8888;
+server.listen(port, console.log.bind(null, `Listening HTTP on port ${port}`));
+
 
