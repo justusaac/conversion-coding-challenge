@@ -4,6 +4,8 @@ const express = require('express');
 
 const server = express();
 
+server.use(express.static('scripts'));
+
 //Load all the stored unit conversions into a global object
 function load_measurements(directory){
 	const results = {};
@@ -41,6 +43,7 @@ function convert_measurement(amount, from_unit, to_unit){
 	}
 	return amount * (units[from_unit] / units[to_unit]);
 }
+
 //Endpoint for converting units
 //Expects `value`, `from`, and `to` in the query string
 server.get('/convert', (request, response) => {
@@ -64,6 +67,29 @@ server.get('/convert', (request, response) => {
 		return;
 	}
 	response.send(result.toString());
+});
+
+//Endpoint for listing all the supported units for a specific measurement
+//Expects a `measurement` in the query string
+server.get('/units', (request, response) => {
+	if(!request.query.hasOwnProperty('measurement')){
+		response.status(400);
+		response.send('Expected query string parameter `measurement`');
+		return;
+	}
+	response.send(JSON.stringify(
+		Object.keys(all_measurements[request.query.measurement] ?? {})
+	));
+});
+
+//Endpoint for listing all the supported things to measure
+server.get('/measurements', (request, response) => {
+	response.send(JSON.stringify(Object.keys(all_measurements)));
+});
+
+//Endpoint for returning a webpage that does conversions
+server.get(['/','/index.html'], (request, response) => {
+	response.sendFile(__dirname+'/index.html');
 });
 
 const port = process.env.PORT || 8888;
