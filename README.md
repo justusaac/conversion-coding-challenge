@@ -7,7 +7,7 @@ After downloading or cloning this repository:
 5. Access the endpoints listed below at the port it printed out in the previous step (by default 8888) in your browser or another HTTP client, for example: <http://localhost:8888/index.html>
 
 ## Endpoints
-- `/` or `index.html`: Returns a web page that allows you to interactively use the other endpoints
+- `/` or `/index.html`: Returns a web page that allows you to interactively use the other endpoints
 - `/measurements`: Returns a JSON list of all the supported types of measurement (length, mass, etc.)
 - `/units/{measurement}`: Returns a JSON list of all the supported units for the specified type of measurement
 - `/convert?value={number}&from={unit}&to={unit}`: Returns the number of `to` units equivalent to `value` units of `from`, or an error message if the units are unsupported or incompatible, or if the query string parameters are incorrect
