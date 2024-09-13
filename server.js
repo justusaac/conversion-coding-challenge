@@ -70,15 +70,9 @@ server.get('/convert', (request, response) => {
 });
 
 //Endpoint for listing all the supported units for a specific measurement
-//Expects a `measurement` in the query string
-server.get('/units', (request, response) => {
-	if(!request.query.hasOwnProperty('measurement')){
-		response.status(400);
-		response.send('Expected query string parameter `measurement`');
-		return;
-	}
+server.get('/units/:measurement', (request, response) => {
 	response.send(JSON.stringify(
-		Object.keys(all_measurements[request.query.measurement] ?? {})
+		Object.keys(all_measurements[request.params.measurement] ?? {})
 	));
 });
 

@@ -20,7 +20,7 @@
 		}
 	</style>
 
-	<script src='measurement-populator.js'></script>
+	<script src='option-populator.js'></script>
 	<script>
 		function fetch_conversion(){
 			const endpoint = `convert
@@ -30,6 +30,17 @@
 			`;
 			fetch(endpoint).then(response => response.text()).then(answer => {
 				document.getElementById("conversion-results").innerHTML = answer;
+			});
+		}
+
+		function populate_measurements(){
+			fetch('measurements').then(response => response.json()).then(measurements => {
+				populate(document.getElementsByClassName('measurement-select'), measurements);
+			});
+		}
+		function populate_units(measurement){
+			fetch(`units/${measurement}`).then(response => response.json()).then(units => {
+				populate(document.getElementsByClassName('unit-select'), units);
 			});
 		}
 	</script>
