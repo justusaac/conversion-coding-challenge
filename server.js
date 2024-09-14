@@ -23,7 +23,7 @@ function load_measurements(directory){
 	return results;
 }
 //Load all the stored unit conversions
-server.locals.all_measurements = load_measurements('./units');
+server.locals.all_measurements = load_measurements(__dirname+'/units');
 
 //Returns the thing that the two units are measuring, or null if they aren't compatible
 server.locals.get_attribute = function(unit1, unit2){
@@ -88,13 +88,13 @@ server.get(['/','/index.html'], (request, response) => {
 });
 
 let port = process.env.PORT ?? 8888;
-port = server.listen(port, ()=>console.log(`Listening HTTP on port ${port}`))?.address()?.port;
+let httpserver = server.listen(port, ()=>console.log(`Listening HTTP on port ${httpserver.address().port}`));
 
 if(process.env.NODE_ENV == 'test'){
 	module.exports = {
 		server,
 		load_measurements,
-		port,
+		httpserver,
 	}
 }
 
