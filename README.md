@@ -5,6 +5,7 @@ After downloading or cloning this repository:
 3. Run the command `npm install` to download all the dependencies
 4. Run the command `node server.js` to run an HTTP server
 5. Access the endpoints listed below at the port it printed out in the previous step (by default 8888) in your browser or another HTTP client, for example: <http://localhost:8888/index.html>
+
 Optional: Run `npm run test` to test the server and its functionality
 
 ## Endpoints
