@@ -42,7 +42,7 @@ test.describe('convert_measurement', () => {
 	test('correct input', () => {
 		function assert_almost_equal(a, b){
 			const epsilon = 0.0001;
-			if(Math.abs(a-b)>epsilon){
+			if(!(Math.abs(a-b)<epsilon)){
 				assert.equal(a,b);
 			}
 		}
